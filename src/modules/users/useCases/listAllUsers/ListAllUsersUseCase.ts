@@ -9,7 +9,13 @@ class ListAllUsersUseCase {
   constructor(private usersRepository: IUsersRepository) {}
 
   execute({ user_id }: IRequest): User[] {
-    // Complete aqui
+    const checkUserExist = this.usersRepository.findById(user_id);
+    if (!checkUserExist) throw Error("User does not found");
+
+    if (!checkUserExist.admin)
+      throw Error("You not enable to see this resource");
+
+    return this.usersRepository.list();
   }
 }
 
